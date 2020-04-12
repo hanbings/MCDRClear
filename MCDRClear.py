@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from time import sleep
 
-
 # 死亡标志位和循环运行时间标志位
 deathFlag = 0
 onRunFlag = 0
@@ -69,7 +68,7 @@ def clean_wait(server):
             sleep(waitCleanTime)
 
 
-#输出帮助
+# 输出帮助
 def print_helper(server):
     server.say('§2■■■■■■■■帮助列表■■■■■■■■')
     server.say('§2 !!clear help --帮助列表')
@@ -77,6 +76,7 @@ def print_helper(server):
     server.say('§2 !!clear c --手动清理   ')
     server.say('§2 !!clear add --手动延迟清理时间')
     server.say('§2■■■■■■■■■■■■■■■■■■■■■   ')
+
 
 # 手动清理
 def on_info(server, info):
@@ -91,14 +91,18 @@ def on_info(server, info):
     aEgg = '[Server thread/INFO]: Killed Egg'
     tTemp = tempInfo
     if tTemp.endswith('!!clear') == True:
-        print_helper(server)
+        if check_player_if_not_command(info):
+            print_helper(server)
     if clearHelp in tempInfo:
-        print_helper(server)
+        if check_player_if_not_command(info):
+            print_helper(server)
     if version in tempInfo:
-        server.say('§2[扫地] Hanbings 3219065882@qq.com 2020/4/11')
+        if check_player_if_not_command(info):
+            server.say('§2[扫地] Hanbings 3219065882@qq.com 2020/4/11')
     if clear in tempInfo:
-        server.say('§2[扫地]即将手动清理 §4警告：手动清理将不会影响自动清理')
-        server.execute('kill @e[type = item]')
+        if check_player_if_not_command(info):
+            server.say('§2[扫地] 即将手动清理 §4警告：手动清理将不会影响自动清理')
+            server.execute('kill @e[type = item]')
     if killText in tempInfo:
         if 'entities' in tempInfo:
             # [19:45:13] [Server thread/INFO]: Killed 2 entities
@@ -107,10 +111,20 @@ def on_info(server, info):
     if noEntity in tempInfo:
         server.say('§2[扫地] §4没有任何掉落物被清理')
     if addFlag in tempInfo:
-        deathFlag = deathFlag + 1
-        if deathFlag > 6:
-            server.say('§4[扫地] 延迟最大时间为 25 分钟')
-        else:
-            server.say('§4[扫地] 已延迟清理' + ' ' + '现在已延迟的时间是：' + str(int((deathFlag * 300) / 60)) + '分钟')
+        if check_player_if_not_command(info):
+            deathFlag = deathFlag + 1
+            if deathFlag > 6:
+                server.say('§4[扫地] 延迟最大时间为 25 分钟')
+            else:
+                server.say('§4[扫地] 已延迟清理' + ' ' + '现在已延迟的时间是：' + str(int((deathFlag * 300) / 60)) + '分钟')
     if aEgg in tempInfo:
         server.say('§2[扫地] 只清理了鸡蛋 QWQ')
+
+
+# 判断指令是不是处于聊天语句最前方
+def check_player_if_not_command(info):
+    if str(info.content).index('!!clear') == 0:
+        print(str(info.content).index('!!clear'))
+        return True
+    else:
+        return False
