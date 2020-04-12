@@ -12,6 +12,7 @@ def on_load(server, old_module):
     global deathFlag
     global onRunFlag
     onRunFlag = 1
+    server.add_help_message('§2[扫地]', ' §5用!!clear或!!clear help查看详细帮助')
     server.say('§2[扫地] 自动清理掉落物已启动')
     server.logger.info('[扫地] 自动清理掉落物已启动')
     while True:
@@ -124,7 +125,6 @@ def on_info(server, info):
 # 判断指令是不是处于聊天语句最前方
 def check_player_if_not_command(info):
     if str(info.content).index('!!clear') == 0:
-        print(str(info.content).index('!!clear'))
         return True
     else:
         return False
