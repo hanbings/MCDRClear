@@ -80,7 +80,7 @@ def print_helper(server):
 
 
 # 手动清理
-def on_info(server, info):
+def on_user_info(server, info):
     global deathFlag
     tempInfo = str(info)
     clearHelp = '!!clear help'
